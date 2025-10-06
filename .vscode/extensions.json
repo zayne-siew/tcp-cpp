@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "eamodio.gitlens",
+    "ms-vscode.cmake-tools",
+    "ms-vscode.cpptools",
+    "streetsidesoftware.code-spell-checker"
+  ]
+}

@@ -1,0 +1,16 @@
+Checks: "clang-diagnostic-*,clang-analyzer-*,cppcoreguidelines-*,modernize-*,performance-*,readability-*"
+# For MacOS: clang-tidy needs to know where the system headers are
+# See: https://stackoverflow.com/questions/53111082/how-to-install-clang-tidy-on-macos
+# To configure CMake: cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . -B build
+# To run clang-tidy: clang-tidy -p build <source-file> (recommended) OR clang-tidy <source-file>
+ExtraArgsBefore:
+  [
+    "-Wall",
+    "-std=c++17",
+    "-x",
+    "c++",
+    "-isysroot",
+    "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+  ]
+HeaderFilterRegex: "^(?!/Applications/).*"
+WarningsAsErrors: true
