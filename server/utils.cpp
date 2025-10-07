@@ -14,6 +14,8 @@
 #include <thread>
 #include <unordered_map>
 
+namespace fs = std::filesystem;
+
 // Buffer size for reading from socket
 constexpr std::size_t BUFFER_SIZE = 1024;
 
@@ -71,7 +73,7 @@ int bind_port (int socketFD, std::uint16_t port) {
 
 void catalog (const std::string& dirpath, int connectFD) {
     try {
-        for (const auto& entry : std::filesystem::directory_iterator (dirpath)) {
+        for (const auto& entry : fs::directory_iterator (dirpath)) {
             const auto& path = entry.path ();
             if (entry.is_regular_file ()) {
                 std::string client_and_file =
@@ -98,7 +100,7 @@ void catalog (const std::string& dirpath, int connectFD) {
                 catalog (path.string (), connectFD);
             }
         }
-    } catch (const std::filesystem::filesystem_error& e) {
+    } catch (const fs::filesystem_error& e) {
         std::cerr << "Error accessing directory " << dirpath << ": "
                   << e.what () << std::endl;
     }
@@ -156,12 +158,12 @@ void enqueue_client (int connectFD) {
 void count_files (const std::string& dirpath, int connectFD) {
     try {
         // Check that the path exists and is a directory
-        if (!std::filesystem::exists (dirpath) || !std::filesystem::is_directory (dirpath)) {
+        if (!fs::exists (dirpath) || !fs::is_directory (dirpath)) {
             throw std::runtime_error ("Invalid directory: " + dirpath);
         }
 
         // Recursively iterate through the directory
-        for (const auto& entry : std::filesystem::recursive_directory_iterator (dirpath)) {
+        for (const auto& entry : fs::recursive_directory_iterator (dirpath)) {
             if (entry.is_regular_file ()) {
                 std::lock_guard<std::mutex> lock (uc_mutex);
                 unsatisfied_clients[connectFD]++;

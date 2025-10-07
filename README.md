@@ -23,11 +23,17 @@ Ensure that you have [Clang](https://clang.llvm.org/get_started.html) ver. >17.0
 Also ensure that you have VSCode installed with all of the recommended extensions. From the root directory of the project, run the following commands on the terminal:
 
 ```bash
+# To build the project via CMake
 cmake -B build -S .
 cmake --build build
 
-# ./build/tcp-cpp [-p <PORT>] [-s <THREAD POOL SIZE>] [-q <QUEUE SIZE>] [-b <BLOCK SIZE>]; e.g.
-./build/tcp-cpp -p 8080 -s 4 -q 10 -b 1024  # values specified here are by default
+# In one terminal, spin up the server instance:
+# ./build/server [-p <PORT>] [-s <THREAD POOL SIZE>] [-q <QUEUE SIZE>] [-b <BLOCK SIZE>]
+./build/server -p 8080 -s 4 -q 10 -b 1024 # values specified here are by default
+
+# In separate terminal(s), spin up client instance(s):
+# ./build/client [-i <SERVER IP>] [-p <SERVER PORT>] [-d <FILE DIRECTORY>]
+./build/client/ -i localhost -p 8080 -d . # values specified here are by default
 ```
 
 To delete all the executable and object files generated:

@@ -1,15 +1,24 @@
 cmake_minimum_required(VERSION 3.10)
 project(tcp-cpp VERSION 0.1.0 LANGUAGES CXX)
 
-# Use C++20
-set(CMAKE_CXX_STANDARD 20)
+# Use C++17
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-# Add your source files
-add_executable(tcp-cpp
+# -----------------------------
+# Server executable
+# -----------------------------
+add_executable(server
     server/server.cpp
     server/utils.cpp
+)
+
+# -----------------------------
+# Client executable
+# -----------------------------
+add_executable(client
+    client/client.cpp
 )
 
 # Enable testing (optional)
