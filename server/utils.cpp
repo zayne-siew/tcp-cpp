@@ -19,14 +19,14 @@ namespace fs = std::filesystem;
 // Buffer size for reading from socket
 constexpr std::size_t BUFFER_SIZE = 1024;
 
-std::atomic<bool> stop_flag{ false };
-std::queue<std::string> clients;
-std::unordered_map<int, int> unsatisfied_clients;
+std::atomic<bool> stop_flag{ false }; // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
+std::queue<std::string> clients; // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
+std::unordered_map<int, int> unsatisfied_clients; // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
 
-std::mutex uc_mutex;
-std::mutex pool_mutex;
-std::condition_variable pool_cond;
-std::condition_variable full_pool;
+std::mutex uc_mutex; // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
+std::mutex pool_mutex; // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
+std::condition_variable pool_cond; // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
+std::condition_variable full_pool; // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
 
 /**
  * Recursively scans the directory and its subdirectories to find files and add them to the work queue.

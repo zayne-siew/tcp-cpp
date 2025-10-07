@@ -16,7 +16,7 @@
 constexpr std::size_t BACKLOG = 1280;
 
 ServerConfig serverConfig; // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
-std::unordered_map<int, std::mutex> socket_mutex_map;
+std::unordered_map<int, std::mutex> socket_mutex_map; // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
 
 /**
  * Main function to start the server.

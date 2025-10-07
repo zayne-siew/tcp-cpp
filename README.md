@@ -42,6 +42,13 @@ To delete all the executable and object files generated:
 make clean
 ```
 
+To run clang-tidy:
+
+```bash
+# clang-tidy [-p build] <source-file>
+clang-tidy server/server.cpp
+```
+
 ## Acknowledgements
 
 This project is largely based off of the work of [this GitHub repository](https://github.com/themisvaltinos/TCP-Client-Server). The code has since been largely formatted for modern C++17 syntax and built using CMake.
