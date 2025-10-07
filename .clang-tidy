@@ -1,4 +1,4 @@
-Checks: "clang-diagnostic-*,clang-analyzer-*,cppcoreguidelines-*,modernize-*,performance-*,readability-*"
+Checks: "clang-diagnostic-*,clang-analyzer-*,cppcoreguidelines-*,-cppcoreguidelines-init-variables,-cppcoreguidelines-pro-type-member-init,-cppcoreguidelines-pro-type-reinterpret-cast,performance-*,-performance-avoid-endl,readability-*"
 # For MacOS: clang-tidy needs to know where the system headers are
 # See: https://stackoverflow.com/questions/53111082/how-to-install-clang-tidy-on-macos
 # To configure CMake: cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=ON -S . -B build

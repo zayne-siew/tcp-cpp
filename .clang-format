@@ -15,7 +15,7 @@
 #   Chromium A style complying with Chromium’s style guide
 #   Mozilla A style complying with Mozilla’s style guide
 #   WebKit A style complying with WebKit’s style guide
-#BasedOnStyle:
+BasedOnStyle: Google
 
 # TabWidth (unsigned)
 # The number of columns used for tab stops.
@@ -75,7 +75,7 @@ AccessModifierOffset: 0
 #   BAS_AlwaysBreak (in configuration: AlwaysBreak) Always break after an open bracket, if the parameters don’t fit on a single line, e.g.:
 #   someLongFunction(
 #       argument1, argument2);
-AlignAfterOpenBracket: false
+AlignAfterOpenBracket: AlwaysBreak
 
 # AlignConsecutiveAssignments (bool)
 # If true, aligns consecutive assignments.
@@ -87,14 +87,14 @@ AlignConsecutiveAssignments: true
 
 # AlignEscapedNewlinesLeft (bool)
 # If true, aligns escaped newlines as far left as possible. Otherwise puts them into the right-most column.
-AlignEscapedNewlinesLeft: true
+AlignEscapedNewlinesLeft: false
 
 # AlignOperands (bool)
 # If true, horizontally align operands of binary and ternary expressions.
 # Specifically, this aligns operands of a single expression that needs to be split over multiple lines, e.g.:
 # int aaa = bbbbbbbbbbbbbbb +
 #           ccccccccccccccc;
-AlignOperands: false
+AlignOperands: true
 
 # AlignTrailingComments (bool)
 # If true, aligns trailing comments.
@@ -219,7 +219,7 @@ ConstructorInitializerIndentWidth: 0
 
 # ContinuationIndentWidth (unsigned)
 # Indent width for line continuations.
-ContinuationIndentWidth: 0
+ContinuationIndentWidth: 4
 
 # Cpp11BracedListStyle (bool)
 # If true, format braced lists as best suited for C++11 braced lists.

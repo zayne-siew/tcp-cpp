@@ -1045,6 +1045,7 @@ dkms.conf
 # Raspberry Pi Pico disassembler file
 *.dis
 
+# CMake
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
@@ -1057,4 +1058,10 @@ compile_commands.json
 CTestTestfile.cmake
 _deps
 CMakeUserPresets.json
+
+# CPack generated
+CPackConfig.cmake
+CPackSourceConfig.cmake
+*.tar.gz
+*.zip
 
