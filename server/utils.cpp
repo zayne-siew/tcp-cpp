@@ -1,4 +1,4 @@
-#include "utils.h"
+#include "utils.hpp"
 
 #include <netinet/in.h>
 #include <sys/stat.h>
@@ -46,15 +46,6 @@ void catalog (const std::string& dirpath, int connectFD);
  * @param connectFD The file descriptor of the client connection.
  */
 void count_files (const std::string& dirpath, int connectFD);
-
-/**
- * Handles a client request by sending the requested file.
- *
- * @param client_request A string containing the client connection file descriptor and the file path.
- *
- * @note This function assumes the format "<connectFD> <file_path>" for client_request.
- */
-void handle_client_request (const std::string& client_request);
 
 int bind_port (int socketFD, std::uint16_t port) {
     // Create and initialize server address
@@ -149,10 +140,6 @@ void get_client_request (int connectFD) {
 
     // Recursively find and add files in the queue
     catalog (dirpath, connectFD);
-}
-
-void enqueue_client (int connectFD) {
-    std::thread ([connectFD] () { get_client_request (connectFD); }).detach ();
 }
 
 void count_files (const std::string& dirpath, int connectFD) {

@@ -2,12 +2,12 @@
 
 #include <string>
 
+constexpr int DEFAULT_SERVER_PORT = 8080;
+
 // Client configuration structure
 struct ClientConfig {
     // Server IP address
     std::string server_ip = "localhost";
     // Server port number
-    int server_port = 8080;
-    // Directory to request
-    std::string directory = ".";
+    int server_port = DEFAULT_SERVER_PORT;
 };

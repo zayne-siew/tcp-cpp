@@ -1,6 +1,6 @@
 #pragma once
 
-#include "server.h"
+#include "server.hpp"
 
 /**
  * Binds a socket to a specified port.
@@ -24,11 +24,13 @@ int bind_port (int socketFD, std::uint16_t port);
 void get_client_request (int connectFD);
 
 /**
- * Enqueues a client request into the work queue.
+ * Handles a client request by sending the requested file.
  *
- * @param connectFD The file descriptor of the client connection.
+ * @param client_request A string containing the client connection file descriptor and the file path.
+ *
+ * @note This function assumes the format "<connectFD> <file_path>" for client_request.
  */
-void enqueue_client (int connectFD);
+void handle_client_request (const std::string& client_request);
 
 /**
  * Worker thread function that processes tasks from the work queue.

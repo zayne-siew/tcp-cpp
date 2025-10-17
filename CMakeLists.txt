@@ -19,6 +19,8 @@ add_executable(server
 # -----------------------------
 add_executable(client
     client/client.cpp
+    client/fileio.cpp
+    client/utils.cpp
 )
 
 # Enable testing (optional)

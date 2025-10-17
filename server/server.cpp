@@ -1,4 +1,4 @@
-#include "server.h"
+#include "server.hpp"
 
 #include <arpa/inet.h>
 #include <netinet/in.h>
@@ -10,13 +10,21 @@
 #include <thread>
 #include <unordered_map>
 
-#include "utils.h"
+#include "utils.hpp"
 
 // Maximum number of pending connections
 constexpr std::size_t BACKLOG = 1280;
 
 ServerConfig serverConfig; // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
 std::unordered_map<int, std::mutex> socket_mutex_map; // NOLINT(cppcoreguidelines-avoid-non-const-global-variables)
+
+/**
+ * Enqueues a client request into the work queue.
+ * @param connectFD The file descriptor of the client connection.
+ */
+void enqueue_client (int connectFD) {
+    std::thread ([connectFD] () { get_client_request (connectFD); }).detach ();
+}
 
 /**
  * Main function to start the server.
@@ -28,50 +36,50 @@ std::unordered_map<int, std::mutex> socket_mutex_map; // NOLINT(cppcoreguideline
 int main (int argc, char** argv) {
     std::mutex sm_mutex;
 
-    try {
-        // Parse command-line args
-        int opt;
-        while ((opt = getopt (argc, argv, "p:s:q:b:")) != -1) {
-            switch (opt) {
-            case 'p': serverConfig.port = std::stoi (optarg); break;
-            case 's': serverConfig.thread_pool_size = std::stoi (optarg); break;
-            case 'q': serverConfig.queue_size = std::stoi (optarg); break;
-            case 'b': serverConfig.block_size = std::stoi (optarg); break;
-            default:
-                throw std::runtime_error (
-                    "Usage: ./dataServer [-p port] [-s thread_pool_size] "
-                    "[-q queue_size] [-b block_size]");
-            }
-        }
-
-        std::cout << "\nServer parameters:" << std::endl;
-        std::cout << "PORT = " << serverConfig.port << std::endl;
-        std::cout << "thread_pool_size = " << serverConfig.thread_pool_size << std::endl;
-        std::cout << "queue_size = " << serverConfig.queue_size << std::endl;
-        std::cout << "block_size = " << serverConfig.block_size << std::endl;
-
-        // Worker thread pool
-        std::vector<std::thread> thread_pool;
-        thread_pool.reserve (serverConfig.thread_pool_size);
-        for (int i = 0; i < serverConfig.thread_pool_size; ++i) {
-            thread_pool.emplace_back (worker_thread);
-        }
-
-        // Create and bind socket
-        int socketFD = socket (AF_INET, SOCK_STREAM, 0);
-        if (socketFD < 0) {
+    // Parse command-line args
+    int opt;
+    while ((opt = getopt (argc, argv, "p:s:q:b:")) != -1) {
+        switch (opt) {
+        case 'p': serverConfig.port = std::stoi (optarg); break;
+        case 's': serverConfig.thread_pool_size = std::stoi (optarg); break;
+        case 'q': serverConfig.queue_size = std::stoi (optarg); break;
+        case 'b': serverConfig.block_size = std::stoi (optarg); break;
+        default:
             throw std::runtime_error (
-                "Failed to create socket: " + std::string (strerror (errno)));
+                "Usage: ./dataServer [-p port] [-s thread_pool_size] "
+                "[-q queue_size] [-b block_size]");
         }
+    }
 
-        bind_port (socketFD, serverConfig.port);
-        std::cout << "Server initialized..." << std::endl;
+    std::cout << "\nServer parameters:" << std::endl;
+    std::cout << "PORT = " << serverConfig.port << std::endl;
+    std::cout << "thread_pool_size = " << serverConfig.thread_pool_size << std::endl;
+    std::cout << "queue_size = " << serverConfig.queue_size << std::endl;
+    std::cout << "block_size = " << serverConfig.block_size << std::endl;
 
-        if (listen (socketFD, BACKLOG) < 0) {
-            throw std::runtime_error ("Listen failed: " + std::string (strerror (errno)));
-        }
-        std::cout << "Listening for connections on port " << serverConfig.port << std::endl;
+    // Worker thread pool
+    std::vector<std::thread> thread_pool;
+    thread_pool.reserve (serverConfig.thread_pool_size);
+    for (int i = 0; i < serverConfig.thread_pool_size; ++i) {
+        thread_pool.emplace_back (worker_thread);
+    }
 
+    // Create and bind socket
+    int socketFD = socket (AF_INET, SOCK_STREAM, 0);
+    if (socketFD < 0) {
+        throw std::runtime_error (
+            "Failed to create socket: " + std::string (strerror (errno)));
+    }
+
+    bind_port (socketFD, serverConfig.port);
+    std::cout << "Server initialized..." << std::endl;
+
+    if (listen (socketFD, BACKLOG) < 0) {
+        throw std::runtime_error ("Listen failed: " + std::string (strerror (errno)));
+    }
+    std::cout << "Listening for connections on port " << serverConfig.port << std::endl;
+
+    try {
         // Listen for clients to accept
         while (true) {
             sockaddr_in client_addr{};
