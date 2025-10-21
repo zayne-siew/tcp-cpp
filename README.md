@@ -36,7 +36,7 @@ cmake --build build
 
 # In separate terminal(s), spin up client instance(s):
 # ./build/client [-i <SERVER IP>] [-p <SERVER PORT>] [-d <FILE DIRECTORY>]
-./build/client/ -i localhost -p 8080 -d . # values specified here are by default
+./build/client -i localhost -p 8080 -d . # values specified here are by default
 ```
 
 To delete all the executable and object files generated:
