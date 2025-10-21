@@ -20,7 +20,7 @@ TCP is a reliable protocol that guarantees that the data remain intact and arriv
 
 Ensure that you have [Clang](https://clang.llvm.org/get_started.html) ver. >17.0 installed locally. For MacOS users, see [this StackOverflow post](https://stackoverflow.com/questions/53111082/how-to-install-clang-tidy-on-macos) on how to set up Clang-Tidy and other Clang toolings.
 
-Also ensure that you have VSCode installed with all of the recommended extensions. From the root directory of the project, run the following commands on the terminal:
+Also ensure that you have VSCode installed with all of the recommended extensions. Then, clone this repository. From the root directory of the project, run the following commands on the terminal:
 
 ```bash
 # To build the project via CMake

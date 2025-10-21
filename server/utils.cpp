@@ -98,14 +98,59 @@ void catalog (const std::string& dirpath, int connectFD) {
     }
 }
 
+// void get_client_request (int connectFD) {
+//     std::string dirpath;
+//     std::vector<char> buffer (BUFFER_SIZE);
+
+//     // Read folder path from client
+//     ssize_t bytes_read;
+//     while ((bytes_read = read (connectFD, buffer.data (), buffer.size ())) > 0) {
+//         dirpath.append (buffer.data (), static_cast<size_t> (bytes_read));
+//         if (bytes_read < static_cast<ssize_t> (buffer.size ())) {
+//             break;
+//         }
+//     }
+
+//     // Read error handling
+//     if (bytes_read < 0) {
+//         perror ("Failed to read directory path from client socket");
+//         return;
+//     }
+
+//     std::cout
+//         << "[Thread: " << std::hash<std::thread::id>{}(std::this_thread::get_id ())
+//         << "]: About to scan directory " << dirpath << std::endl;
+
+//     // How many files need to be processed
+//     count_files (dirpath, connectFD);
+
+//     // Send server block size to client
+//     uint32_t server_block_size_network = htonl (serverConfig.block_size);
+//     if (write (connectFD, &server_block_size_network, sizeof (server_block_size_network)) < 0) {
+//         perror ("Failed to send server block size to client");
+//         return;
+//     }
+
+//     // Send file count to client
+//     int counter            = unsatisfied_clients[connectFD];
+//     uint32_t count_network = htonl (static_cast<uint32_t> (counter));
+//     if (write (connectFD, &count_network, sizeof (count_network)) < 0) {
+//         perror ("Failed to send file count to client");
+//         return;
+//     }
+
+//     // Recursively find and add files in the queue
+//     catalog (dirpath, connectFD);
+// }
+
 void get_client_request (int connectFD) {
-    std::string dirpath;
+    std::string data;
     std::vector<char> buffer (BUFFER_SIZE);
 
-    // Read folder path from client
+    // Read data from client
     ssize_t bytes_read;
     while ((bytes_read = read (connectFD, buffer.data (), buffer.size ())) > 0) {
-        dirpath.append (buffer.data (), static_cast<size_t> (bytes_read));
+        data.append (buffer.data (), static_cast<size_t> (bytes_read));
         if (bytes_read < static_cast<ssize_t> (buffer.size ())) {
             break;
         }
@@ -113,34 +158,13 @@ void get_client_request (int connectFD) {
 
     // Read error handling
     if (bytes_read < 0) {
-        perror ("Failed to read directory path from client socket");
+        perror ("Failed to read data from client socket");
         return;
     }
 
     std::cout
         << "[Thread: " << std::hash<std::thread::id>{}(std::this_thread::get_id ())
-        << "]: About to scan directory " << dirpath << std::endl;
-
-    // How many files need to be processed
-    count_files (dirpath, connectFD);
-
-    // Send server block size to client
-    uint32_t server_block_size_network = htonl (serverConfig.block_size);
-    if (write (connectFD, &server_block_size_network, sizeof (server_block_size_network)) < 0) {
-        perror ("Failed to send server block size to client");
-        return;
-    }
-
-    // Send file count to client
-    int counter            = unsatisfied_clients[connectFD];
-    uint32_t count_network = htonl (static_cast<uint32_t> (counter));
-    if (write (connectFD, &count_network, sizeof (count_network)) < 0) {
-        perror ("Failed to send file count to client");
-        return;
-    }
-
-    // Recursively find and add files in the queue
-    catalog (dirpath, connectFD);
+        << "]: " << data << std::endl;
 }
 
 void count_files (const std::string& dirpath, int connectFD) {

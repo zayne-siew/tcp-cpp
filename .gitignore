@@ -110,6 +110,7 @@ captures/
 .idea/assetWizardSettings.xml
 .idea/dictionaries
 .idea/libraries
+.idea/editor.xml
 # Android Studio 3 in .gitignore file.
 .idea/caches
 .idea/modules.xml
@@ -1049,6 +1050,7 @@ dkms.conf
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
+CMakePresets.json
 CMakeScripts
 Testing
 Makefile
