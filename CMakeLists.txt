@@ -23,6 +23,11 @@ add_executable(client
     client/utils.cpp
 )
 
+if (WIN32)
+    target_link_libraries(server PRIVATE ws2_32)
+    target_link_libraries(client PRIVATE ws2_32)
+endif()
+
 # Enable testing (optional)
 include(CTest)
 enable_testing()

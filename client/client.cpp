@@ -1,7 +1,14 @@
 #include "client.hpp"
 
+#ifdef _WIN32
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#pragma comment(lib, "ws2_32.lib")
+#else
 #include <arpa/inet.h>
-#include <netdb.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
+#endif
 
 #include <iostream>
 
@@ -37,7 +44,7 @@ int main (int argc, char* argv[]) {
     // Resolve host
     hostent* server_host = gethostbyname (clientConfig.server_ip.c_str ());
     if (server_host == nullptr) {
-        herror ("gethostbyname");
+        std::cerr << "Unable to get host" << std::endl;
         return EXIT_FAILURE;
     }
 

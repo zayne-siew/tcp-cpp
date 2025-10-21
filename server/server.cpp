@@ -1,7 +1,15 @@
 #include "server.hpp"
 
+#ifdef _WIN32
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#pragma comment(lib, "ws2_32.lib")
+#else
 #include <arpa/inet.h>
 #include <netinet/in.h>
+#include <sys/socket.h>
+#endif
+
 #include <unistd.h>
 
 #include <iostream>
@@ -9,6 +17,7 @@
 #include <string>
 #include <thread>
 #include <unordered_map>
+#include <vector>
 
 #include "utils.hpp"
 

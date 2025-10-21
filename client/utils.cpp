@@ -2,6 +2,8 @@
 
 #include <unistd.h>
 
+#include <cstring>
+#include <stdexcept>
 #include <string>
 
 /**
