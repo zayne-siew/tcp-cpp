@@ -1049,6 +1049,7 @@ dkms.conf
 CMakeLists.txt.user
 CMakeCache.txt
 CMakeFiles
+CMakePresets.json
 CMakeScripts
 Testing
 Makefile
