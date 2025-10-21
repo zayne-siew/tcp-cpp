@@ -13,6 +13,7 @@
 #include <string>
 #include <thread>
 #include <unordered_map>
+#include <atomic>
 
 namespace fs = std::filesystem;
 
@@ -174,7 +175,7 @@ void worker_thread () {
             // Acquire lock for accessing the queue
             std::unique_lock<std::mutex> lock (pool_mutex);
             // Wait until there is work to do
-            pool_cond.wait (lock, [] {
+            pool_cond.wait (lock, [&] {
                 return !clients.empty () || stop_flag.load ();
             });
 

@@ -9,6 +9,8 @@
 #include <string>
 #include <thread>
 #include <unordered_map>
+#include <vector>
+#include <cstring>
 
 #include "utils.hpp"
 
@@ -103,12 +105,17 @@ int main (int argc, char** argv) {
             enqueue_client (connectFD);
         }
 
+        std::cout << "Client has accepted.";
+
         // Wait for worker threads to finish
         for (auto& thread : thread_pool) {
             if (thread.joinable ()) {
                 thread.join ();
             }
         }
+
+        std::cout << "All worker threads have finished.";
+
     } catch (const std::exception& e) {
         std::cerr << "Server error: " << e.what () << std::endl;
         return EXIT_FAILURE;

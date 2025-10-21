@@ -13,7 +13,7 @@ int main (int argc, char* argv[]) {
 
     // Directory to request from the server
     // TODO: Configure this according to what the server is expected to serve
-    std::string directory = ".";
+    std::string directory = "./README.md";
 
     // Parse command-line args
     int opt;
