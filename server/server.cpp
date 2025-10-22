@@ -12,6 +12,7 @@
 
 #include <unistd.h>
 
+#include <cstring>
 #include <iostream>
 #include <mutex>
 #include <string>
