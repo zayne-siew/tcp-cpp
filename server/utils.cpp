@@ -182,14 +182,13 @@ void get_client_request (int connectFD) {
                   << "]: Packet #" << packet_count
                   << ", received " << bytes_read << " bytes: ";
 
-        // Print the data (assuming it's numeric)
+        // Print the data
         for (ssize_t i = 0; i < bytes_read && i < 100; ++i) {  // Print first 100 bytes
             std::cout << (int)(unsigned char)buffer[i] << " ";
         }
         std::cout << std::endl;
 
-        // TODO: Process your Simulink data here
-        // For example, if Simulink is sending doubles:
+        // Process simulink data
         double* data = reinterpret_cast<double*>(buffer.data());
         size_t num_values = bytes_read / sizeof(double);
         for (size_t i = 0; i < num_values; ++i) {
