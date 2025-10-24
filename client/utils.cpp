@@ -1,6 +1,8 @@
 #include "utils.hpp"
 
 #include <unistd.h>
+#include <cstring>
+#include <stdexcept>
 
 #include <cstring>
 #include <stdexcept>

@@ -21,6 +21,7 @@
 #include <string>
 #include <thread>
 #include <unordered_map>
+#include <atomic>
 
 namespace fs = std::filesystem;
 
@@ -150,28 +151,67 @@ void catalog (const std::string& dirpath, int connectFD) {
 //     catalog (dirpath, connectFD);
 // }
 
+// void get_client_request (int connectFD) {
+//     std::string data;
+//     std::vector<char> buffer (BUFFER_SIZE);
+//
+//     // Read data from client
+//     ssize_t bytes_read;
+//     while ((bytes_read = read (connectFD, buffer.data (), buffer.size ())) > 0) {
+//         data.append (buffer.data (), static_cast<size_t> (bytes_read));
+//         if (bytes_read < static_cast<ssize_t> (buffer.size ())) {
+//             break;
+//         }
+//     }
+//
+//     // Read error handling
+//     if (bytes_read < 0) {
+//         perror ("Failed to read data from client socket");
+//         return;
+//     }
+//
+//     std::cout
+//         << "[Thread: " << std::hash<std::thread::id>{}(std::this_thread::get_id ())
+//         << "]: " << data << std::endl;
+// }
+
 void get_client_request (int connectFD) {
-    std::string data;
     std::vector<char> buffer (BUFFER_SIZE);
 
-    // Read data from client
+    std::cout << "[Thread: " << std::hash<std::thread::id>{}(std::this_thread::get_id())
+              << "]: Connected, waiting for data..." << std::endl;
+
+    // Continuously read data from Simulink
     ssize_t bytes_read;
+    int packet_count = 0;
     while ((bytes_read = read (connectFD, buffer.data (), buffer.size ())) > 0) {
-        data.append (buffer.data (), static_cast<size_t> (bytes_read));
-        if (bytes_read < static_cast<ssize_t> (buffer.size ())) {
-            break;
+        packet_count++;
+        std::cout << "[Thread: " << std::hash<std::thread::id>{}(std::this_thread::get_id())
+                  << "]: Packet #" << packet_count
+                  << ", received " << bytes_read << " bytes: ";
+
+        // Print the data
+        for (ssize_t i = 0; i < bytes_read && i < 100; ++i) {  // Print first 100 bytes
+            std::cout << (int)(unsigned char)buffer[i] << " ";
+        }
+        std::cout << std::endl;
+
+        // Process simulink data
+        double* data = reinterpret_cast<double*>(buffer.data());
+        size_t num_values = bytes_read / sizeof(double);
+        for (size_t i = 0; i < num_values; ++i) {
+            std::cout << "Value " << i << ": " << data[i] << std::endl;
         }
     }
 
-    // Read error handling
     if (bytes_read < 0) {
-        perror ("Failed to read data from client socket");
-        return;
+        perror ("Error reading from socket");
     }
 
-    std::cout
-        << "[Thread: " << std::hash<std::thread::id>{}(std::this_thread::get_id ())
-        << "]: " << data << std::endl;
+    std::cout << "[Thread: " << std::hash<std::thread::id>{}(std::this_thread::get_id())
+              << "]: Client disconnected, total packets received: " << packet_count << std::endl;
+
+    close (connectFD);
 }
 
 void count_files (const std::string& dirpath, int connectFD) {
@@ -206,7 +246,7 @@ void worker_thread () {
             // Acquire lock for accessing the queue
             std::unique_lock<std::mutex> lock (pool_mutex);
             // Wait until there is work to do
-            pool_cond.wait (lock, [] {
+            pool_cond.wait (lock, [&] {
                 return !clients.empty () || stop_flag.load ();
             });
 
