@@ -5,6 +5,8 @@ project(tcp-cpp VERSION 0.1.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+# Set compiler for Linux
+set(CMAKE_CXX_COMPILER g++)
 
 # -----------------------------
 # Server executable
@@ -22,6 +24,11 @@ add_executable(client
     client/fileio.cpp
     client/utils.cpp
 )
+
+if (WIN32)
+    target_link_libraries(server PRIVATE ws2_32)
+    target_link_libraries(client PRIVATE ws2_32)
+endif()
 
 # Enable testing (optional)
 include(CTest)

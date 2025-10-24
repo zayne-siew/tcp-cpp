@@ -4,6 +4,8 @@
 #include <cstring>
 #include <stdexcept>
 
+#include <cstring>
+#include <stdexcept>
 #include <string>
 
 /**

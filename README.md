@@ -24,7 +24,10 @@ Also ensure that you have VSCode installed with all of the recommended extension
 
 ```bash
 # To build the project via CMake
-cmake -B build -S .
+# Step 1:
+cmake -B build -S . # default, with no compiler flags
+cmake -S . -B build -G "MinGW Makefiles" -DCMAKE_C_COMPILER="C:\msys64\ucrt64\bin\clang.exe" -DCMAKE_CXX_COMPILER="C:\msys64\ucrt64\bin\clang++.exe" # for Win32 using MinGW generator and MSYS2 Clang compiler
+# Step 2:
 cmake --build build
 
 # In one terminal, spin up the server instance:
@@ -33,13 +36,14 @@ cmake --build build
 
 # In separate terminal(s), spin up client instance(s):
 # ./build/client [-i <SERVER IP>] [-p <SERVER PORT>] [-d <FILE DIRECTORY>]
-./build/client/ -i localhost -p 8080 -d . # values specified here are by default
+./build/client -i localhost -p 8080 -d . # values specified here are by default
 ```
 
 To delete all the executable and object files generated:
 
 ```bash
-make clean
+rm -rf build
+mkdir build
 ```
 
 To run clang-tidy:
